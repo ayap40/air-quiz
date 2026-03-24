@@ -7,76 +7,57 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      background: #f9f8f6; color: #1a1a1a; min-height: 100vh;
-      display: flex; align-items: flex-start; justify-content: center;
-      padding: 3rem 1rem 4rem;
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background: #f9f8f6; color: #1a1a1a; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 3rem 1rem 4rem; }
     @media (prefers-color-scheme: dark) { body { background: #111; color: #e8e8e8; } }
-    .card {
-      background: #fff; border-radius: 16px; border: 1px solid rgba(0,0,0,0.08);
-      padding: 2.5rem 2rem; max-width: 640px; width: 100%;
-    }
+    .card { background: #fff; border-radius: 16px; border: 1px solid rgba(0,0,0,0.08); padding: 2.5rem 2rem; max-width: 640px; width: 100%; }
     @media (prefers-color-scheme: dark) { .card { background: #1c1c1c; border-color: rgba(255,255,255,0.08); } }
     .eyebrow { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #888; margin-bottom: 2rem; }
-    .screen { display: none; }
-    .screen.active { display: block; }
+    .screen { display: none; } .screen.active { display: block; }
     .progress-bar { height: 3px; background: rgba(0,0,0,0.08); border-radius: 2px; margin-bottom: 1.75rem; overflow: hidden; }
     @media (prefers-color-scheme: dark) { .progress-bar { background: rgba(255,255,255,0.1); } }
     .progress-fill { height: 100%; background: #6c63ff; border-radius: 2px; transition: width 0.35s ease; }
     .q-counter { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #aaa; margin-bottom: 0.6rem; }
     .q-text { font-size: 19px; font-weight: 600; line-height: 1.45; margin-bottom: 1.5rem; color: inherit; }
     .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
-    .option-btn {
-      display: flex; align-items: flex-start; gap: 12px; width: 100%;
-      padding: 13px 16px; background: transparent; border: 1.5px solid rgba(0,0,0,0.1);
-      border-radius: 12px; cursor: pointer; font-size: 14.5px; line-height: 1.5;
-      text-align: left; color: inherit; transition: border-color 0.12s, background 0.12s;
-    }
+    .option-btn { display: flex; align-items: flex-start; gap: 12px; width: 100%; padding: 13px 16px; background: transparent; border: 1.5px solid rgba(0,0,0,0.1); border-radius: 12px; cursor: pointer; font-size: 14.5px; line-height: 1.5; text-align: left; color: inherit; transition: border-color 0.12s, background 0.12s; }
     @media (prefers-color-scheme: dark) { .option-btn { border-color: rgba(255,255,255,0.12); } }
     .option-btn:hover { border-color: #6c63ff; background: rgba(108,99,255,0.05); }
     .option-btn.selected { border-color: #6c63ff !important; background: rgba(108,99,255,0.1) !important; color: #4a40cc !important; }
     @media (prefers-color-scheme: dark) { .option-btn.selected { color: #a89eff !important; background: rgba(108,99,255,0.18) !important; } }
-    .opt-letter {
-      flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
-      border: 1.5px solid currentColor; display: flex; align-items: center;
-      justify-content: center; font-size: 11px; font-weight: 600; margin-top: 1px; pointer-events: none;
-    }
+    .opt-letter { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid currentColor; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; margin-top: 1px; pointer-events: none; }
     .opt-text { pointer-events: none; }
     .nav-row { display: flex; justify-content: flex-end; gap: 10px; }
-    .btn {
-      padding: 10px 22px; border-radius: 10px; font-size: 14px; font-weight: 500;
-      cursor: pointer; border: 1.5px solid rgba(0,0,0,0.12);
-      background: transparent; color: inherit; transition: background 0.12s;
-    }
+    .btn { padding: 10px 22px; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; border: 1.5px solid rgba(0,0,0,0.12); background: transparent; color: inherit; transition: background 0.12s; }
     @media (prefers-color-scheme: dark) { .btn { border-color: rgba(255,255,255,0.15); } }
-    .btn:hover:not(:disabled) { background: rgba(0,0,0,0.05); }
-    .btn:disabled { opacity: 0.3; cursor: default; }
+    .btn:hover:not(:disabled) { background: rgba(0,0,0,0.05); } .btn:disabled { opacity: 0.3; cursor: default; }
     .btn-primary { background: #6c63ff; border-color: #6c63ff; color: #fff; }
     .btn-primary:hover:not(:disabled) { background: #5a52e0; border-color: #5a52e0; }
     .name-heading { font-size: 22px; font-weight: 700; margin-bottom: 0.5rem; }
     .name-sub { font-size: 15px; color: #777; margin-bottom: 1.5rem; line-height: 1.5; }
     @media (prefers-color-scheme: dark) { .name-sub { color: #999; } }
-    .result-badge-sm {
-      display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
-      padding: 4px 12px; border-radius: 999px; margin-bottom: 1.25rem;
-    }
+    .result-badge-sm { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; padding: 4px 12px; border-radius: 999px; margin-bottom: 1.25rem; }
     .name-input-row { display: flex; gap: 10px; margin-bottom: 0.75rem; }
-    .name-input {
-      flex: 1; padding: 11px 14px; border-radius: 10px; font-size: 15px;
-      border: 1.5px solid rgba(0,0,0,0.12); background: transparent; color: inherit; outline: none;
-    }
+    .name-input { flex: 1; padding: 11px 14px; border-radius: 10px; font-size: 15px; border: 1.5px solid rgba(0,0,0,0.12); background: transparent; color: inherit; outline: none; }
     @media (prefers-color-scheme: dark) { .name-input { border-color: rgba(255,255,255,0.15); } }
     .name-input:focus { border-color: #6c63ff; }
     .name-error { font-size: 13px; color: #c0392b; min-height: 18px; }
-    .result-badge {
-      display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
-      padding: 4px 12px; border-radius: 999px; margin-bottom: 0.75rem;
-    }
+    .result-badge { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; padding: 4px 12px; border-radius: 999px; margin-bottom: 0.75rem; }
     .result-name { font-size: 26px; font-weight: 700; margin-bottom: 0.75rem; }
-    .result-desc { font-size: 15px; line-height: 1.7; color: #555; margin-bottom: 1.75rem; }
+    .result-desc { font-size: 15px; line-height: 1.7; color: #555; margin-bottom: 1.5rem; }
     @media (prefers-color-scheme: dark) { .result-desc { color: #aaa; } }
+
+    /* ── Depth bars ── */
+    .depth-section { margin-bottom: 1.75rem; }
+    .depth-title { font-size: 12px; font-weight: 600; color: #aaa; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; }
+    .axis-row { margin-bottom: 1rem; }
+    .axis-labels { display: flex; justify-content: space-between; font-size: 12px; color: #aaa; margin-bottom: 5px; }
+    .axis-track { height: 8px; background: rgba(0,0,0,0.07); border-radius: 999px; position: relative; overflow: visible; }
+    @media (prefers-color-scheme: dark) { .axis-track { background: rgba(255,255,255,0.08); } }
+    .axis-fill { height: 100%; border-radius: 999px; transition: width 0.6s ease; }
+    .axis-marker { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,0.15); transition: left 0.6s ease; }
+    @media (prefers-color-scheme: dark) { .axis-marker { border-color: #1c1c1c; } }
+    .axis-verdict { font-size: 13px; font-weight: 600; margin-top: 5px; }
+
     .board-title { font-size: 12px; font-weight: 600; color: #aaa; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.75rem; }
     .chart-wrap { position: relative; width: 100%; height: 380px; margin-bottom: 1rem; }
     .retake-row { display: flex; justify-content: flex-end; margin-top: 1rem; }
@@ -115,6 +96,36 @@
     <div class="result-badge" id="r-badge"></div>
     <div class="result-name" id="r-name"></div>
     <div class="result-desc" id="r-desc"></div>
+
+    <!-- Depth view -->
+    <div class="depth-section">
+      <div class="depth-title">How deep in</div>
+
+      <div class="axis-row">
+        <div class="axis-labels">
+          <span>← Shane</span>
+          <span>Tyler →</span>
+        </div>
+        <div class="axis-track" id="x-track">
+          <div class="axis-fill" id="x-fill"></div>
+          <div class="axis-marker" id="x-marker"></div>
+        </div>
+        <div class="axis-verdict" id="x-verdict"></div>
+      </div>
+
+      <div class="axis-row">
+        <div class="axis-labels">
+          <span>↓ Tous</span>
+          <span>Ari ↑</span>
+        </div>
+        <div class="axis-track" id="y-track">
+          <div class="axis-fill" id="y-fill"></div>
+          <div class="axis-marker" id="y-marker"></div>
+        </div>
+        <div class="axis-verdict" id="y-verdict"></div>
+      </div>
+    </div>
+
     <div class="board-title">The team so far</div>
     <div class="chart-wrap"><canvas id="resultChart"></canvas></div>
     <div class="retake-row"><button class="btn" id="btn-retake">Take it again</button></div>
@@ -122,205 +133,116 @@
 </div>
 
 <script>
-/* ─── JSONBin config ─── */
-var BIN_ID = '69c1f113c3097a1dd55331d1';
+var BIN_ID  = '69c1f587c3097a1dd5534344';
 var API_KEY = '$2a$10$GPFkeXNHLa3ytiUNTkMW2eP3gYkv.ghuahRH5gixPxe6jiCtsa1cq';
 var BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
 
 async function fetchResults() {
-  var res = await fetch(BIN_URL + '/latest', {
-    headers: { 'X-Master-Key': API_KEY }
-  });
+  var res = await fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': API_KEY } });
   if (!res.ok) throw new Error('fetch failed');
-  var data = await res.json();
-  return data.record.results || [];
+  return (await res.json()).record.results || [];
 }
-
 async function saveResult(entry) {
-  // Read current, merge, write back
   var current = await fetchResults();
-  var idx = entry.name
-    ? current.findIndex(function(r) { return r.name && r.name.toLowerCase() === entry.name.toLowerCase(); })
-    : -1;
-  if (idx >= 0) current[idx] = entry;
-  else current.push(entry);
-
-  var res = await fetch(BIN_URL, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
-    body: JSON.stringify({ results: current })
-  });
+  var idx = entry.name ? current.findIndex(function(r){ return r.name && r.name.toLowerCase()===entry.name.toLowerCase(); }) : -1;
+  if (idx >= 0) current[idx] = entry; else current.push(entry);
+  var res = await fetch(BIN_URL, { method:'PUT', headers:{'Content-Type':'application/json','X-Master-Key':API_KEY}, body:JSON.stringify({results:current}) });
   if (!res.ok) throw new Error('save failed');
   return current;
 }
 
-/* ─── Questions ─── */
-var questions = [
-  {
-    text: "Something just shipped. What's your first instinct?",
-    options: [
-      { text: "Open it immediately and start cataloguing what could be better", x: -1, y: -1 },
-      { text: "Tell everyone about it before you've fully looked at it", x: 0, y: 1 },
-      { text: "Frame it as a milestone and make sure people feel the weight of it", x: -0.5, y: 0.5 },
-      { text: "Check if anyone's blocked and quietly start unblocking them", x: 1, y: -0.5 }
-    ]
-  },
-  {
-    text: "How do you communicate when you're excited about something at work?",
-    options: [
-      { text: "Document it properly so the energy isn't lost", x: -1, y: -1 },
-      { text: "Post about it immediately — figure out the details later", x: 0, y: 1 },
-      { text: "Say something that makes people feel proud to be part of it", x: -0.5, y: 0.5 },
-      { text: "Say \"cool\" and get back to work — the work speaks for itself", x: 1, y: -0.5 }
-    ]
-  },
-  {
-    text: "You're reviewing something a teammate made. Your feedback style:",
-    options: [
-      { text: "Specific and bulleted — you catch the small stuff others miss", x: -1, y: -1 },
-      { text: "Enthusiastic first, honest second — you lead with energy", x: 0, y: 1 },
-      { text: "Direct and decisive — you know what you want and say it", x: -0.5, y: 0 },
-      { text: "Methodical — you work through every case before saying anything", x: 1, y: -1 }
-    ]
-  },
-  {
-    text: "A decision needs to be made and there's no consensus. You:",
-    options: [
-      { text: "Write up the options, share with everyone, align before acting", x: -1, y: -1 },
-      { text: "Go with your gut and generate momentum — course-correct later", x: 0, y: 1 },
-      { text: "Make the call confidently and move on — paralysis is the real enemy", x: -0.5, y: 0 },
-      { text: "Run a small test before committing either way", x: 1, y: -1 }
-    ]
-  },
-  {
-    text: "How do you handle praise when someone recognizes your work?",
-    options: [
-      { text: "Thank them sincerely and redirect credit to whoever helped", x: -1, y: -0.5 },
-      { text: "Share it publicly — good energy should spread", x: 0, y: 1 },
-      { text: "Acknowledge it briefly and use it as fuel to keep pushing", x: -0.5, y: 0.5 },
-      { text: "Say thanks and get back to the next thing", x: 1, y: -0.5 }
-    ]
-  },
-  {
-    text: "The team is losing energy heading into a hard stretch. What do you do?",
-    options: [
-      { text: "Surface how far you've already come — the data tells a better story than the feeling", x: -1, y: -0.5 },
-      { text: "Drop something fun in the group chat to break the tension", x: 0, y: 1 },
-      { text: "Zoom out and remind everyone why the work matters", x: -0.5, y: 0.5 },
-      { text: "Find out who's blocked and start removing friction one by one", x: 1, y: -1 }
-    ]
-  },
-  {
-    text: "What's your relationship with Slack?",
-    options: [
-      { text: "You respond to everything promptly — you don't like loose ends", x: -1, y: -1 },
-      { text: "You post constantly but reply inconsistently", x: 0, y: 1 },
-      { text: "You're selective — you respond when it actually matters", x: -0.5, y: 0 },
-      { text: "Focused mode most of the time, but you always catch up eventually", x: 1, y: -0.5 }
-    ]
-  },
-  {
-    text: "A competitor makes a big move. How do you respond?",
-    options: [
-      { text: "Analyze it carefully — what does it mean for your roadmap?", x: -1, y: -0.5 },
-      { text: "Turn it into content — make their move part of your narrative", x: 0, y: 1 },
-      { text: "Frame it as market validation and keep moving", x: -0.5, y: 0.5 },
-      { text: "Note it, track it, don't overreact", x: 1, y: -1 }
-    ]
-  },
-  {
-    text: "How do you wrap up a project when it's done?",
-    options: [
-      { text: "Write up what worked, what didn't, and what comes next", x: -1, y: -1 },
-      { text: "Celebrate loudly, then immediately start talking about the next thing", x: 0, y: 1 },
-      { text: "Make sure the win gets its moment — connect it to the bigger story", x: -0.5, y: 0.5 },
-      { text: "Make sure everything is handed off cleanly before you move on", x: 1, y: -0.5 }
-    ]
-  },
-  {
-    text: "You notice something small is broken — not your job, not urgent. You:",
-    options: [
-      { text: "File it properly with context and tag the right person", x: -1, y: -1 },
-      { text: "Say something in the channel and see if someone picks it up", x: 0, y: 0.5 },
-      { text: "Make a quick call: fix it or cut it", x: -0.5, y: 0 },
-      { text: "Add it to your mental backlog and quietly fix it when you have a moment", x: 1, y: -0.5 }
-    ]
-  },
-  {
-    text: "How do you feel about documentation?",
-    options: [
-      { text: "Essential — you write docs proactively, not reactively", x: -1, y: -1 },
-      { text: "Important in theory, but you're usually three steps ahead of your own notes", x: 0, y: 1 },
-      { text: "You trust the people who keep it — you're more of a move-fast person yourself", x: -0.5, y: 0.5 },
-      { text: "You leave notes for yourself constantly, especially mid-process", x: 1, y: -0.5 }
-    ]
-  },
-  {
-    text: "When you onboard someone new, you tend to:",
-    options: [
-      { text: "Share the docs, the context, and the unwritten rules — all of it upfront", x: -1, y: -1 },
-      { text: "Get them excited about what's possible before worrying about the details", x: 0, y: 1 },
-      { text: "Give them a clear picture of what winning looks like, then get out of their way", x: -0.5, y: 0.5 },
-      { text: "Set them up with the tools and systems, let them ramp at their own pace", x: 1, y: -0.5 }
-    ]
-  },
-  {
-    text: "Your default way to celebrate a team win:",
-    options: [
-      { text: "Tag the specific people involved and call out exactly what they did", x: -1, y: -1 },
-      { text: "All caps, immediate, contagious — get everyone hyped", x: 0, y: 1 },
-      { text: "Connect it to the bigger story — this is what we've been building toward", x: -0.5, y: 0.5 },
-      { text: "A genuine but understated acknowledgment, then back to building", x: 1, y: -0.5 }
-    ]
-  },
-  {
-    text: "It's 9pm the night before a big day. You are:",
-    options: [
-      { text: "Still online, QAing the last things, catching anything that slipped through", x: -1, y: -1 },
-      { text: "Sending energy to whoever's still around, keeping the vibe alive", x: 0, y: 1 },
-      { text: "You made the key call hours ago and trust the team to land it", x: -0.5, y: 0 },
-      { text: "Wrapping up cleanly, telling people to rest, making sure nothing is on fire", x: 1, y: -0.5 }
-    ]
-  },
-  {
-    text: "How do you know when something is good enough to ship?",
-    options: [
-      { text: "When the checklist is done and the edge cases are covered", x: -1, y: -1 },
-      { text: "When you feel it — you'll know", x: 0, y: 1 },
-      { text: "When it's clearly better than what exists right now", x: -0.5, y: 0.5 },
-      { text: "When you've tested the core flow and the main thing works reliably", x: 1, y: -1 }
-    ]
-  }
-];
+var questions=[{text:"Something just shipped. What's your first instinct?",options:[{text:"Open it immediately and start cataloguing what could be better",x:-1,y:-1},{text:"Tell everyone about it before you've fully looked at it",x:0,y:1},{text:"Frame it as a milestone and make sure people feel the weight of it",x:-0.5,y:0.5},{text:"Check if anyone's blocked and quietly start unblocking them",x:1,y:-0.5}]},{text:"How do you communicate when you're excited about something at work?",options:[{text:"Document it properly so the energy isn't lost",x:-1,y:-1},{text:"Post about it immediately — figure out the details later",x:0,y:1},{text:"Say something that makes people feel proud to be part of it",x:-0.5,y:0.5},{text:'Say "cool" and get back to work — the work speaks for itself',x:1,y:-0.5}]},{text:"You're reviewing something a teammate made. Your feedback style:",options:[{text:"Specific and bulleted — you catch the small stuff others miss",x:-1,y:-1},{text:"Enthusiastic first, honest second — you lead with energy",x:0,y:1},{text:"Direct and decisive — you know what you want and say it",x:-0.5,y:0},{text:"Methodical — you work through every case before saying anything",x:1,y:-1}]},{text:"A decision needs to be made and there's no consensus. You:",options:[{text:"Write up the options, share with everyone, align before acting",x:-1,y:-1},{text:"Go with your gut and generate momentum — course-correct later",x:0,y:1},{text:"Make the call confidently and move on — paralysis is the real enemy",x:-0.5,y:0},{text:"Run a small test before committing either way",x:1,y:-1}]},{text:"How do you handle praise when someone recognizes your work?",options:[{text:"Thank them sincerely and redirect credit to whoever helped",x:-1,y:-0.5},{text:"Share it publicly — good energy should spread",x:0,y:1},{text:"Acknowledge it briefly and use it as fuel to keep pushing",x:-0.5,y:0.5},{text:"Say thanks and get back to the next thing",x:1,y:-0.5}]},{text:"The team is losing energy heading into a hard stretch. What do you do?",options:[{text:"Surface how far you've already come — the data tells a better story than the feeling",x:-1,y:-0.5},{text:"Drop something fun in the group chat to break the tension",x:0,y:1},{text:"Zoom out and remind everyone why the work matters",x:-0.5,y:0.5},{text:"Find out who's blocked and start removing friction one by one",x:1,y:-1}]},{text:"What's your relationship with Slack?",options:[{text:"You respond to everything promptly — you don't like loose ends",x:-1,y:-1},{text:"You post constantly but reply inconsistently",x:0,y:1},{text:"You're selective — you respond when it actually matters",x:-0.5,y:0},{text:"Focused mode most of the time, but you always catch up eventually",x:1,y:-0.5}]},{text:"A competitor makes a big move. How do you respond?",options:[{text:"Analyze it carefully — what does it mean for your roadmap?",x:-1,y:-0.5},{text:"Turn it into content — make their move part of your narrative",x:0,y:1},{text:"Frame it as market validation and keep moving",x:-0.5,y:0.5},{text:"Note it, track it, don't overreact",x:1,y:-1}]},{text:"How do you wrap up a project when it's done?",options:[{text:"Write up what worked, what didn't, and what comes next",x:-1,y:-1},{text:"Celebrate loudly, then immediately start talking about the next thing",x:0,y:1},{text:"Make sure the win gets its moment — connect it to the bigger story",x:-0.5,y:0.5},{text:"Make sure everything is handed off cleanly before you move on",x:1,y:-0.5}]},{text:"You notice something small is broken — not your job, not urgent. You:",options:[{text:"File it properly with context and tag the right person",x:-1,y:-1},{text:"Say something in the channel and see if someone picks it up",x:0,y:0.5},{text:"Make a quick call: fix it or cut it",x:-0.5,y:0},{text:"Add it to your mental backlog and quietly fix it when you have a moment",x:1,y:-0.5}]},{text:"How do you feel about documentation?",options:[{text:"Essential — you write docs proactively, not reactively",x:-1,y:-1},{text:"Important in theory, but you're usually three steps ahead of your own notes",x:0,y:1},{text:"You trust the people who keep it — you're more of a move-fast person yourself",x:-0.5,y:0.5},{text:"You leave notes for yourself constantly, especially mid-process",x:1,y:-0.5}]},{text:"When you onboard someone new, you tend to:",options:[{text:"Share the docs, the context, and the unwritten rules — all of it upfront",x:-1,y:-1},{text:"Get them excited about what's possible before worrying about the details",x:0,y:1},{text:"Give them a clear picture of what winning looks like, then get out of their way",x:-0.5,y:0.5},{text:"Set them up with the tools and systems, let them ramp at their own pace",x:1,y:-0.5}]},{text:"Your default way to celebrate a team win:",options:[{text:"Tag the specific people involved and call out exactly what they did",x:-1,y:-1},{text:"All caps, immediate, contagious — get everyone hyped",x:0,y:1},{text:"Connect it to the bigger story — this is what we've been building toward",x:-0.5,y:0.5},{text:"A genuine but understated acknowledgment, then back to building",x:1,y:-0.5}]},{text:"It's 9pm the night before a big day. You are:",options:[{text:"Still online, QAing the last things, catching anything that slipped through",x:-1,y:-1},{text:"Sending energy to whoever's still around, keeping the vibe alive",x:0,y:1},{text:"You made the key call hours ago and trust the team to land it",x:-0.5,y:0},{text:"Wrapping up cleanly, telling people to rest, making sure nothing is on fire",x:1,y:-0.5}]},{text:"How do you know when something is good enough to ship?",options:[{text:"When the checklist is done and the edge cases are covered",x:-1,y:-1},{text:"When you feel it — you'll know",x:0,y:1},{text:"When it's clearly better than what exists right now",x:-0.5,y:0.5},{text:"When you've tested the core flow and the main thing works reliably",x:1,y:-1}]}];
 
-var RESULTS = {
-  ll: { name: "Lawful evil",  badge: "Shane × Jeff", badgeBg: "#fde8df", badgeColor: "#8b3a1a", dot: "#e07b50",
-    desc: "Shane's conviction plus Jeff's relentless attention to detail — a genuinely dangerous combination. You know exactly what you want, you have a plan to get there, and you will notice the wrong UTM, the misaligned pixel, and the uncredited win. Operates at scale. Remembers everything." },
-  ul: { name: "Chaotic evil",  badge: "Shane × Ari",  badgeBg: "#fde8f0", badgeColor: "#8b1a45", dot: "#d4537e",
-    desc: "Shane's big-swing energy meets Ari's unfiltered posting instincts. You start hype trains before the train exists, make calls on gut, and your Slack messages either shift the direction of a company or make zero sense. Sometimes both in the same thread." },
-  ur: { name: "Chaotic good",  badge: "Ari × Tyler",  badgeBg: "#e8f5d8", badgeColor: "#2d5c0e", dot: "#639922",
-    desc: "Ari's contagious energy paired with Tyler's calm builder brain. You ship things loudly, celebrate the weird wins, and somehow the systems still work. People aren't always sure what you're doing, but they're always glad you're around when it ships." },
-  lr: { name: "Lawful good",   badge: "Jeff × Tyler", badgeBg: "#deeffe", badgeColor: "#0c3d7a", dot: "#378add",
-    desc: "Jeff's methodical warmth meets Tyler's quiet reliability. You write the recap, leave notes mid-process, ask who owns it before touching it, and thank people sincerely. The backbone of every launch that looked effortless from the outside." }
+var RESULTS={
+  ll:{name:"Lawful evil",badge:"Shane × Jeff",badgeBg:"#fde8df",badgeColor:"#8b3a1a",dot:"#e07b50",desc:"Shane's conviction plus Jeff's relentless attention to detail — a genuinely dangerous combination. You know exactly what you want, you have a plan to get there, and you will notice the wrong UTM, the misaligned pixel, and the uncredited win. Operates at scale. Remembers everything."},
+  ul:{name:"Chaotic evil",badge:"Shane × Ari",badgeBg:"#fde8f0",badgeColor:"#8b1a45",dot:"#d4537e",desc:"Shane's big-swing energy meets Ari's unfiltered posting instincts. You start hype trains before the train exists, make calls on gut, and your Slack messages either shift the direction of a company or make zero sense. Sometimes both in the same thread."},
+  ur:{name:"Chaotic good",badge:"Ari × Tyler",badgeBg:"#e8f5d8",badgeColor:"#2d5c0e",dot:"#639922",desc:"Ari's contagious energy paired with Tyler's calm builder brain. You ship things loudly, celebrate the weird wins, and somehow the systems still work. People aren't always sure what you're doing, but they're always glad you're around when it ships."},
+  lr:{name:"Lawful good",badge:"Jeff × Tyler",badgeBg:"#deeffe",badgeColor:"#0c3d7a",dot:"#378add",desc:"Jeff's methodical warmth meets Tyler's quiet reliability. You write the recap, leave notes mid-process, ask who owns it before touching it, and thank people sincerely. The backbone of every launch that looked effortless from the outside."}
 };
 
-function getKey(ax, ay) { return ax<=0&&ay<=0?'ll': ax<=0&&ay>0?'ul': ax>0&&ay>0?'ur':'lr'; }
-function shuffle(arr) { return arr.slice().sort(function() { return Math.random()-0.5; }); }
+// Labels for each intensity level on each axis
+// X axis: negative = Shane side, positive = Tyler side
+var X_LABELS = [
+  { max: -0.75, label: "Strongly Shane", color: "#e07b50" },
+  { max: -0.35, label: "Leaning Shane",  color: "#e8976e" },
+  { max:  0.35, label: "Right in the middle", color: "#aaa" },
+  { max:  0.75, label: "Leaning Tyler",  color: "#378add" },
+  { max:  1.5,  label: "Strongly Tyler", color: "#1a6ec0" }
+];
+// Y axis: negative = Tous side, positive = Ari side
+var Y_LABELS = [
+  { max: -0.75, label: "Strongly Tous", color: "#8b6914" },
+  { max: -0.35, label: "Leaning Tous",  color: "#a08030" },
+  { max:  0.35, label: "Right in the middle", color: "#aaa" },
+  { max:  0.75, label: "Leaning Ari",   color: "#d4537e" },
+  { max:  1.5,  label: "Strongly Ari",  color: "#b02060" }
+];
 
-var shuffled = questions.map(function(q) { return { text: q.text, options: shuffle(q.options) }; });
-var current=0, answers=[], selectedIdx=null, total=shuffled.length;
-var myResult=null, chartInst=null;
+function getLabelFor(val, labels) {
+  for (var i=0; i<labels.length; i++) { if (val <= labels[i].max) return labels[i]; }
+  return labels[labels.length-1];
+}
 
-/* ─── Quiz ─── */
-function render() {
-  var q=shuffled[current], isLast=current===total-1;
+function renderDepth(ax, ay) {
+  // X axis bar: map -1.5..1.5 to 0..100%
+  var xPct = Math.round(((ax + 1.5) / 3) * 100);
+  var xInfo = getLabelFor(ax, X_LABELS);
+  var xFill = document.getElementById('x-fill');
+  var xMarker = document.getElementById('x-marker');
+  var xVerdict = document.getElementById('x-verdict');
+
+  // Fill from center to marker position
+  var xCenter = 50;
+  if (xPct >= xCenter) {
+    xFill.style.marginLeft = xCenter + '%';
+    xFill.style.width = (xPct - xCenter) + '%';
+  } else {
+    xFill.style.marginLeft = xPct + '%';
+    xFill.style.width = (xCenter - xPct) + '%';
+  }
+  xFill.style.background = xInfo.color;
+  xMarker.style.left = xPct + '%';
+  xMarker.style.background = xInfo.color;
+  xVerdict.textContent = xInfo.label;
+  xVerdict.style.color = xInfo.color;
+
+  // Y axis bar: map -1.5..1.5 to 0..100%
+  var yPct = Math.round(((ay + 1.5) / 3) * 100);
+  var yInfo = getLabelFor(ay, Y_LABELS);
+  var yFill = document.getElementById('y-fill');
+  var yMarker = document.getElementById('y-marker');
+  var yVerdict = document.getElementById('y-verdict');
+
+  var yCenter = 50;
+  if (yPct >= yCenter) {
+    yFill.style.marginLeft = yCenter + '%';
+    yFill.style.width = (yPct - yCenter) + '%';
+  } else {
+    yFill.style.marginLeft = yPct + '%';
+    yFill.style.width = (yCenter - yPct) + '%';
+  }
+  yFill.style.background = yInfo.color;
+  yMarker.style.left = yPct + '%';
+  yMarker.style.background = yInfo.color;
+  yVerdict.textContent = yInfo.label;
+  yVerdict.style.color = yInfo.color;
+}
+
+function getKey(ax,ay){return ax<=0&&ay<=0?'ll':ax<=0&&ay>0?'ul':ax>0&&ay>0?'ur':'lr';}
+function shuffle(arr){return arr.slice().sort(function(){return Math.random()-0.5;});}
+
+var shuffled=questions.map(function(q){return{text:q.text,options:shuffle(q.options)};});
+var current=0,answers=[],selectedIdx=null,total=shuffled.length,myResult=null,chartInst=null;
+
+function render(){
+  var q=shuffled[current],isLast=current===total-1;
   document.getElementById('q-counter').textContent='Question '+(current+1)+' of '+total;
   document.getElementById('q-text').textContent=q.text;
   document.getElementById('progress').style.width=Math.round(current/total*100)+'%';
   var letters=['A','B','C','D'];
   var container=document.getElementById('options');
   container.innerHTML='';
-  q.options.forEach(function(opt,i) {
+  q.options.forEach(function(opt,i){
     var btn=document.createElement('button');
     btn.className='option-btn';
     btn.setAttribute('data-idx',String(i));
@@ -328,14 +250,13 @@ function render() {
     container.appendChild(btn);
   });
   selectedIdx=null;
-  var btnNext=document.getElementById('btn-next'), btnSub=document.getElementById('btn-submit');
-  btnNext.style.display=isLast?'none':''; btnSub.style.display=isLast?'':'none';
-  btnNext.disabled=true; btnSub.disabled=true;
+  var btnNext=document.getElementById('btn-next'),btnSub=document.getElementById('btn-submit');
+  btnNext.style.display=isLast?'none':'';btnSub.style.display=isLast?'':'none';
+  btnNext.disabled=true;btnSub.disabled=true;
 }
 
-document.getElementById('options').addEventListener('click', function(e) {
-  var btn=e.target.closest('.option-btn');
-  if (!btn) return;
+document.getElementById('options').addEventListener('click',function(e){
+  var btn=e.target.closest('.option-btn');if(!btn)return;
   selectedIdx=parseInt(btn.getAttribute('data-idx'),10);
   document.querySelectorAll('.option-btn').forEach(function(b){b.classList.remove('selected');});
   btn.classList.add('selected');
@@ -343,168 +264,83 @@ document.getElementById('options').addEventListener('click', function(e) {
   document.getElementById('btn-submit').disabled=false;
 });
 
-document.getElementById('btn-next').addEventListener('click', function() {
-  if (selectedIdx===null) return;
-  answers.push(shuffled[current].options[selectedIdx]);
-  current++; render();
+document.getElementById('btn-next').addEventListener('click',function(){
+  if(selectedIdx===null)return;
+  answers.push(shuffled[current].options[selectedIdx]);current++;render();
+});
+document.getElementById('btn-submit').addEventListener('click',function(){
+  if(selectedIdx===null)return;
+  answers.push(shuffled[current].options[selectedIdx]);computeResult();
 });
 
-document.getElementById('btn-submit').addEventListener('click', function() {
-  if (selectedIdx===null) return;
-  answers.push(shuffled[current].options[selectedIdx]);
-  computeResult();
-});
-
-function computeResult() {
-  var tx=0, ty=0;
+function computeResult(){
+  var tx=0,ty=0;
   answers.forEach(function(a){tx+=a.x;ty+=a.y;});
-  var ax=tx/answers.length, ay=ty/answers.length;
-  myResult={ x:ax, y:ay, key:getKey(ax,ay) };
+  var ax=tx/answers.length,ay=ty/answers.length;
+  myResult={x:ax,y:ay,key:getKey(ax,ay)};
   var r=RESULTS[myResult.key];
   var badge=document.getElementById('ns-badge');
-  badge.textContent=r.badge; badge.style.background=r.badgeBg; badge.style.color=r.badgeColor;
+  badge.textContent=r.badge;badge.style.background=r.badgeBg;badge.style.color=r.badgeColor;
   document.getElementById('ns-heading').textContent='You got: '+r.name;
   document.getElementById('quiz-screen').classList.remove('active');
   document.getElementById('name-screen').classList.add('active');
-  setTimeout(function(){ document.getElementById('name-input').focus(); }, 100);
+  setTimeout(function(){document.getElementById('name-input').focus();},100);
 }
 
-/* ─── Name entry ─── */
-document.getElementById('name-input').addEventListener('keydown', function(e) {
-  if (e.key==='Enter') document.getElementById('btn-save').click();
+document.getElementById('name-input').addEventListener('keydown',function(e){
+  if(e.key==='Enter')document.getElementById('btn-save').click();
 });
-
-document.getElementById('btn-save').addEventListener('click', async function() {
+document.getElementById('btn-save').addEventListener('click',async function(){
   var name=document.getElementById('name-input').value.trim();
-  if (!name) { document.getElementById('name-error').textContent='Please enter your name.'; return; }
+  if(!name){document.getElementById('name-error').textContent='Please enter your name.';return;}
   document.getElementById('name-error').textContent='';
   var btn=document.getElementById('btn-save');
-  btn.disabled=true; btn.textContent='Saving…';
-  document.getElementById('save-status').textContent='Saving your result…';
-  try {
-    myResult.name=name;
-    var all=await saveResult(myResult);
-    showResultScreen(all);
-  } catch(e) {
-    document.getElementById('save-status').textContent='Couldn\'t save — showing map anyway.';
-    var all=await fetchResults().catch(function(){return[];});
-    showResultScreen(all);
-  } finally {
-    btn.disabled=false; btn.textContent='Add me';
-  }
+  btn.disabled=true;btn.textContent='Saving…';
+  document.getElementById('save-status').textContent='Saving…';
+  try{myResult.name=name;var all=await saveResult(myResult);showResultScreen(all);}
+  catch(e){document.getElementById('save-status').textContent='Couldn\'t save — showing map anyway.';var all=await fetchResults().catch(function(){return[];});showResultScreen(all);}
+  finally{btn.disabled=false;btn.textContent='Add me';}
 });
-
-document.getElementById('btn-skip').addEventListener('click', async function() {
+document.getElementById('btn-skip').addEventListener('click',async function(){
   myResult.name=null;
   document.getElementById('save-status').textContent='Loading map…';
   var all=await fetchResults().catch(function(){return[];});
   showResultScreen(all);
 });
 
-/* ─── Result screen ─── */
-function showResultScreen(allResults) {
+function showResultScreen(allResults){
   var r=RESULTS[myResult.key];
   var badge=document.getElementById('r-badge');
-  badge.textContent=r.badge; badge.style.background=r.badgeBg; badge.style.color=r.badgeColor;
+  badge.textContent=r.badge;badge.style.background=r.badgeBg;badge.style.color=r.badgeColor;
   document.getElementById('r-name').textContent=r.name;
   document.getElementById('r-desc').textContent=r.desc;
   document.getElementById('name-screen').classList.remove('active');
   document.getElementById('result-screen').classList.add('active');
+  renderDepth(myResult.x, myResult.y);
   drawChart(allResults);
 }
 
-/* ─── Chart ─── */
-function drawChart(allResults) {
+function drawChart(allResults){
   var isDark=window.matchMedia('(prefers-color-scheme: dark)').matches;
   var gridColor=isDark?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.06)';
   var textColor=isDark?'#888':'#aaa';
-
-  var quadDatasets=Object.keys(RESULTS).map(function(key) {
+  var quadDatasets=Object.keys(RESULTS).map(function(key){
     var r=RESULTS[key];
     var pts=allResults.filter(function(e){return e.key===key&&e.name;}).map(function(e){return{x:e.x,y:e.y,label:e.name};});
-    return { label:r.name, data:pts, backgroundColor:r.dot+'cc', pointRadius:9, pointHoverRadius:11 };
+    return{label:r.name,data:pts,backgroundColor:r.dot+'cc',pointRadius:9,pointHoverRadius:11};
   });
-
-  var youDataset={
-    label: myResult.name||'You',
-    data:[{x:myResult.x,y:myResult.y,label:myResult.name||'You'}],
-    backgroundColor:'#6c63ff', pointRadius:13, pointHoverRadius:15, pointStyle:'star'
-  };
-
-  var quadPlugin={
-    id:'quadBg',
-    beforeDraw:function(chart){
-      var ca=chart.chartArea,c=chart.ctx,mx=ca.left+ca.width/2,my=ca.top+ca.height/2;
-      [{x:ca.left,y:my,    w:mx-ca.left, h:ca.bottom-my, col:isDark?'rgba(200,120,90,0.13)':'rgba(240,160,130,0.18)'},
-       {x:ca.left,y:ca.top,w:mx-ca.left, h:my-ca.top,    col:isDark?'rgba(210,110,150,0.13)':'rgba(240,150,185,0.18)'},
-       {x:mx,y:ca.top,     w:ca.right-mx,h:my-ca.top,    col:isDark?'rgba(110,180,100,0.13)':'rgba(160,215,130,0.18)'},
-       {x:mx,y:my,         w:ca.right-mx,h:ca.bottom-my, col:isDark?'rgba(80,130,210,0.13)':'rgba(150,195,245,0.18)'}
-      ].forEach(function(q){c.save();c.fillStyle=q.col;c.fillRect(q.x,q.y,q.w,q.h);c.restore();});
-    }
-  };
-
-  var labelPlugin={
-    id:'quadLabels',
-    afterDraw:function(chart){
-      var ca=chart.chartArea,c=chart.ctx,pad=10;
-      c.save();
-      c.font='11px -apple-system,BlinkMacSystemFont,sans-serif';
-      c.fillStyle=isDark?'rgba(255,255,255,0.22)':'rgba(0,0,0,0.18)';
-      c.textAlign='left';  c.fillText('Chaotic evil', ca.left+pad, ca.top+15);
-      c.textAlign='right'; c.fillText('Chaotic good', ca.right-pad,ca.top+15);
-      c.textAlign='left';  c.fillText('Lawful evil',  ca.left+pad, ca.bottom-8);
-      c.textAlign='right'; c.fillText('Lawful good',  ca.right-pad,ca.bottom-8);
-      c.restore();
-    }
-  };
-
-  var namePlugin={
-    id:'nameLabels',
-    afterDatasetsDraw:function(chart){
-      var c=chart.ctx;
-      c.save(); c.textAlign='center';
-      chart.data.datasets.forEach(function(ds,di){
-        var meta=chart.getDatasetMeta(di);
-        var isYou=(di===chart.data.datasets.length-1);
-        ds.data.forEach(function(pt,pi){
-          if (!pt.label) return;
-          var el=meta.data[pi]; if (!el) return;
-          c.font=(isYou?'700':'600')+' 11px -apple-system,BlinkMacSystemFont,sans-serif';
-          c.fillStyle=isYou?(isDark?'#c0baff':'#4a40cc'):(isDark?'rgba(255,255,255,0.7)':'rgba(0,0,0,0.55)');
-          c.fillText(pt.label,el.x,el.y-(isYou?18:14));
-        });
-      });
-      c.restore();
-    }
-  };
-
-  if (chartInst) chartInst.destroy();
-  chartInst=new Chart(document.getElementById('resultChart'),{
-    type:'scatter',
-    data:{datasets:quadDatasets.concat([youDataset])},
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{
-        legend:{display:false},
-        tooltip:{callbacks:{label:function(ctx){return ctx.raw.label||ctx.dataset.label||'';}}}
-      },
-      scales:{
-        x:{min:-1.5,max:1.5,grid:{color:gridColor},border:{color:gridColor},
-          ticks:{color:textColor,maxTicksLimit:5,callback:function(v){if(v===-1.5)return'← Shane';if(v===1.5)return'Tyler →';return '';}}},
-        y:{min:-1.5,max:1.5,grid:{color:gridColor},border:{color:gridColor},
-          ticks:{color:textColor,maxTicksLimit:5,callback:function(v){if(v===1.5)return'Ari ↑';if(v===-1.5)return'Tous ↓';return '';}}}
-      },
-      layout:{padding:{top:24,bottom:8,left:8,right:8}}
-    },
-    plugins:[quadPlugin,labelPlugin,namePlugin]
-  });
+  var youDataset={label:myResult.name||'You',data:[{x:myResult.x,y:myResult.y,label:myResult.name||'You'}],backgroundColor:'#6c63ff',pointRadius:13,pointHoverRadius:15,pointStyle:'star'};
+  var quadPlugin={id:'quadBg',beforeDraw:function(chart){var ca=chart.chartArea,c=chart.ctx,mx=ca.left+ca.width/2,my=ca.top+ca.height/2;[{x:ca.left,y:my,w:mx-ca.left,h:ca.bottom-my,col:isDark?'rgba(200,120,90,0.13)':'rgba(240,160,130,0.18)'},{x:ca.left,y:ca.top,w:mx-ca.left,h:my-ca.top,col:isDark?'rgba(210,110,150,0.13)':'rgba(240,150,185,0.18)'},{x:mx,y:ca.top,w:ca.right-mx,h:my-ca.top,col:isDark?'rgba(110,180,100,0.13)':'rgba(160,215,130,0.18)'},{x:mx,y:my,w:ca.right-mx,h:ca.bottom-my,col:isDark?'rgba(80,130,210,0.13)':'rgba(150,195,245,0.18)'}].forEach(function(q){c.save();c.fillStyle=q.col;c.fillRect(q.x,q.y,q.w,q.h);c.restore();});}};
+  var labelPlugin={id:'quadLabels',afterDraw:function(chart){var ca=chart.chartArea,c=chart.ctx,pad=10;c.save();c.font='11px -apple-system,BlinkMacSystemFont,sans-serif';c.fillStyle=isDark?'rgba(255,255,255,0.22)':'rgba(0,0,0,0.18)';c.textAlign='left';c.fillText('Chaotic evil',ca.left+pad,ca.top+15);c.textAlign='right';c.fillText('Chaotic good',ca.right-pad,ca.top+15);c.textAlign='left';c.fillText('Lawful evil',ca.left+pad,ca.bottom-8);c.textAlign='right';c.fillText('Lawful good',ca.right-pad,ca.bottom-8);c.restore();}};
+  var namePlugin={id:'nameLabels',afterDatasetsDraw:function(chart){var c=chart.ctx;c.save();c.textAlign='center';chart.data.datasets.forEach(function(ds,di){var meta=chart.getDatasetMeta(di);var isYou=(di===chart.data.datasets.length-1);ds.data.forEach(function(pt,pi){if(!pt.label)return;var el=meta.data[pi];if(!el)return;c.font=(isYou?'700':'600')+' 11px -apple-system,BlinkMacSystemFont,sans-serif';c.fillStyle=isYou?(isDark?'#c0baff':'#4a40cc'):(isDark?'rgba(255,255,255,0.7)':'rgba(0,0,0,0.55)');c.fillText(pt.label,el.x,el.y-(isYou?18:14));});});c.restore();}};
+  if(chartInst)chartInst.destroy();
+  chartInst=new Chart(document.getElementById('resultChart'),{type:'scatter',data:{datasets:quadDatasets.concat([youDataset])},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return ctx.raw.label||ctx.dataset.label||'';}}}},scales:{x:{min:-1.5,max:1.5,grid:{color:gridColor},border:{color:gridColor},ticks:{color:textColor,maxTicksLimit:5,callback:function(v){if(v===-1.5)return'← Shane';if(v===1.5)return'Tyler →';return '';}}},y:{min:-1.5,max:1.5,grid:{color:gridColor},border:{color:gridColor},ticks:{color:textColor,maxTicksLimit:5,callback:function(v){if(v===1.5)return'Ari ↑';if(v===-1.5)return'Tous ↓';return '';}}}},layout:{padding:{top:24,bottom:8,left:8,right:8}}},plugins:[quadPlugin,labelPlugin,namePlugin]});
 }
 
-/* ─── Retake ─── */
-document.getElementById('btn-retake').addEventListener('click', function() {
-  current=0; answers=[]; selectedIdx=null; myResult=null;
+document.getElementById('btn-retake').addEventListener('click',function(){
+  current=0;answers=[];selectedIdx=null;myResult=null;
   shuffled=questions.map(function(q){return{text:q.text,options:shuffle(q.options)};});
-  if (chartInst){chartInst.destroy();chartInst=null;}
+  if(chartInst){chartInst.destroy();chartInst=null;}
   document.getElementById('result-screen').classList.remove('active');
   document.getElementById('name-input').value='';
   document.getElementById('name-error').textContent='';
